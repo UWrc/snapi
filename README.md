@@ -22,8 +22,8 @@ Usage:
 Flags:
   -c, --configuration-item string   Configuration item (required). (default "hyak")
   -h, --help                        help for snapi
-  -k, --key string                  config file
-  -r, --record string               Service Now record number (required).
+  -k, --key string                  API key file.
+  -r, --record string               Service Now record number (required). Only REQs, CHGs, and INCs supported.
   -s, --state string                The state of the record. Valid values are (o)pen or (r)esolved. (default "open")
 $ 
 ```
