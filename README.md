@@ -2,7 +2,7 @@
 
 Automation for the Service Now API (i.e., UW Connect). This is a proof-of-concept tool for automating our interaction with UW Connect. The first use case was to run a command on the infrastructure then automatically capture STDOUT and STDERR in the Work Notes.
 
-Additional details about the Service Now API can be found [here](https://uwconnect.uw.edu/kb_view.do?sysparm_article=KB0025022).
+Additional details about the Service Now API can be found [here](https://uwconnect.uw.edu/kb_view.do?sysparm_article=KB0025022) for changes (e.g., REQ, CHG, INC) and [here](https://uw.service-now.com/now/nav/ui/classic/params/target/kb_view.do%3Fsysparm_article%3DKB0032495) for billing.
 
 ## API Keys
 
