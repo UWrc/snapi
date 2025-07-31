@@ -111,11 +111,11 @@ func init() {
 	// This function runs before main() and sets up the application.
 	cobra.OnInitialize(GetCredentials)
 
-	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", "", "config file")
+	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", "", "API key file.")
 	rootCmd.PersistentFlags().StringVarP(&CI, "configuration-item", "c", "hyak", "Configuration item (required).")
 	rootCmd.PersistentFlags().StringVarP(&state, "state", "s", "open", "The state of the record. Valid values are (o)pen or (r)esolved.")
 
-	rootCmd.Flags().StringVarP(&RecordNumber, "record", "r", "", "Service Now record number (required).")
+	rootCmd.Flags().StringVarP(&RecordNumber, "record", "r", "", "Service Now record number (required). Only REQs, CHGs, and INCs supported.")
 	rootCmd.MarkFlagRequired("record")
 }
 
