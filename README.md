@@ -18,9 +18,11 @@ Usage:
   snapi [flags] [command]
 
 Flags:
-  -h, --help            help for snapi
-  -k, --key string      config file (default is .env) (default ".snapi")
-  -r, --record string   Service Now record number (required).
+  -c, --configuration-item string   Configuration item (required). (default "hyak")
+  -h, --help                        help for snapi
+  -k, --key string                  config file
+  -r, --record string               Service Now record number (required).
+  -s, --state string                The state of the record. Valid values are (o)pen or (r)esolved. (default "open")
 $ 
 ```
 

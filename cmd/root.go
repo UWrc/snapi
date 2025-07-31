@@ -20,10 +20,12 @@ var url string = "https://uwconnect.uw.edu/yavin.do"
 var KeyFile string
 var RecordNumber string
 var CI string
+var state string
 
 type Payload struct {
 	RecordNumber string `json:"RecordNumber"`
 	CI           string `json:"CI"`
+	State        string `json:"State"`
 	WorkNotes    string `json:"WorkNotes"`
 }
 
@@ -34,16 +36,14 @@ var rootCmd = &cobra.Command{
 	Long:  ``,
 	Args:  cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) < 1 {
-			fmt.Println("Error: you must specify a command to execute.")
-			os.Exit(1)
-		}
-
 		// Read in API credentials.
 		username := viper.Get("SNAPI_USERNAME").(string)
 		password := viper.Get("SNAPI_PASSWORD").(string)
 
-		WorkNotes := GetWorkNotes(args)
+		WorkNotes := ""
+		if len(args) > 0 {
+			WorkNotes = GetWorkNotes(args)
+		}
 
 		CIs := map[string]string{
 			"hyak":  "Shared HPC Cluster (Hyak)",
@@ -51,11 +51,23 @@ var rootCmd = &cobra.Command{
 			"lolo":  "Shared Central File System (lolo)",
 		}
 
+		states := map[string]string{
+			//"n":    "new",
+			//"new":  "new",
+			"o":    "open",
+			"open": "open",
+			//"h":        "on hold",
+			//"hold":     "on hold",
+			"r":        "resolved",
+			"resolved": "resolved",
+		}
+
 		// Create the JSON payload.
 		// https://uwconnect.uw.edu/kb_view.do?sysparm_article=KB0025022
 		data := Payload{
 			RecordNumber: RecordNumber,
 			CI:           CIs[CI],
+			State:        states[state],
 			WorkNotes:    WorkNotes,
 		}
 		//fmt.Printf("%v\n", data)
@@ -77,10 +89,12 @@ var rootCmd = &cobra.Command{
 		if resp.Status != "200 OK" {
 			fmt.Println("Error: Command was run, record was NOT updated.")
 			body, _ := io.ReadAll(resp.Body)
-			log.Fatalf("Error: %s\n%v\n", resp.Status, body)
+			log.Fatalf("Error: %s\n%s\n", resp.Status, body)
 		} else {
-			fmt.Printf("%s updated.\n", RecordNumber)
+			fmt.Printf("%s updated [%s].\n", RecordNumber, strings.ToUpper(states[state]))
 		}
+		//body, _ := io.ReadAll(resp.Body)
+		//fmt.Printf("Error: %s\n%s\n", resp.Status, body)
 	},
 }
 
@@ -99,6 +113,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", "", "config file")
 	rootCmd.PersistentFlags().StringVarP(&CI, "configuration-item", "c", "hyak", "Configuration item (required).")
+	rootCmd.PersistentFlags().StringVarP(&state, "state", "s", "open", "The state of the record. Valid values are (o)pen or (r)esolved.")
 
 	rootCmd.Flags().StringVarP(&RecordNumber, "record", "r", "", "Service Now record number (required).")
 	rootCmd.MarkFlagRequired("record")
