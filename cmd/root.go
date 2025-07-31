@@ -97,7 +97,7 @@ func init() {
 	// This function runs before main() and sets up the application.
 	cobra.OnInitialize(GetCredentials)
 
-	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", ".snapi", "config file")
+	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", "", "config file")
 	rootCmd.PersistentFlags().StringVarP(&CI, "configuration-item", "c", "hyak", "Configuration item (required).")
 
 	rootCmd.Flags().StringVarP(&RecordNumber, "record", "r", "", "Service Now record number (required).")
@@ -106,9 +106,20 @@ func init() {
 
 func GetCredentials() {
 	if KeyFile != "" {
-		viper.SetConfigFile(KeyFile)
-		viper.SetConfigType("dotenv")
+		_, err := os.Stat(KeyFile)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error reading config file: %s\n", err)
+			os.Exit(1)
+		} else {
+			viper.SetConfigFile(KeyFile)
+		}
+	} else {
+		viper.AddConfigPath(".")
+		home, _ := os.UserHomeDir()
+		viper.AddConfigPath(home)
+		viper.SetConfigName(".snapi")
 	}
+	viper.SetConfigType("dotenv")
 
 	err := viper.ReadInConfig()
 	if err != nil {
@@ -142,7 +153,7 @@ func GetWorkNotes(args []string) string {
 	capturedError := strings.ReplaceAll(stderrBuf.String(), "\n", "<br />")
 
 	// Generate SN WorkNotes from the above information.
-	WorkNotes := fmt.Sprintf("Command run on <code>%s</code> by <code>%s</code> in <code>%s</code>.<br /><br /><b><code>%s</code></b><br /><br /><code>--- STDOUT ---</code><br /><br /><pre>%s</pre><br /><br /><code>--- STDERR ---</code><br /><br /><pre>%s</pre><br />", hostname, user.Username, cwd, strings.Join(args, " "), capturedOutput, capturedError)
+	WorkNotes := fmt.Sprintf("Ran on <code>%s</code> by <code>%s</code> in <code>%s</code>.<br /><br /><b>Command: <code>%s</code></b><br /><br /><code>--- STDOUT ---</code><br /><br /><pre>%s</pre><br /><br /><code>--- STDERR ---</code><br /><br /><pre>%s</pre><br />", hostname, user.Username, cwd, strings.Join(args, " "), capturedOutput, capturedError)
 
 	return WorkNotes
 }
