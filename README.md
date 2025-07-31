@@ -20,17 +20,20 @@ Run `snapi -h` for additional information.
 
 ```bash
 $ snapi -h
-A command line tool to interact with the ServiceNow API.
+snapi v0.0.3: A command line tool to interact with the ServiceNow API.
 
 Usage:
   snapi [flags] [command]
 
 Flags:
+  -a, --assigned-to string          A single netID or email address for the primary contact working on the record.
   -c, --configuration-item string   Configuration item (required). (default "hyak")
   -h, --help                        help for snapi
   -k, --key string                  API key file.
+  -n, --note-list string            A comma-separated list of email addresses to add to the work note watch list for this record. This is for all internal (i.e., non-customer) facing communications and notes.
   -r, --record string               Service Now record number (required). Only REQs, CHGs, and INCs supported.
   -s, --state string                The state of the record. Valid values are (o)pen or (r)esolved. (default "open")
+  -w, --watch-list string           A comma-separated list of email addresses to add to the watch list for this record. This is for all customer facing communications.
 $ 
 ```
 
