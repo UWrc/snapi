@@ -22,12 +22,18 @@ var KeyFile string
 var RecordNumber string
 var CI string
 var state string
+var AssignedTo string
+var CommentWatch string
+var NoteWatch string
 
 type Payload struct {
 	RecordNumber string `json:"RecordNumber"`
 	CI           string `json:"CI"`
 	State        string `json:"State"`
 	WorkNotes    string `json:"WorkNotes"`
+	AssignedTo   string `json:"AssignedTo"`
+	CommentWatch   string `json:"WatchList"`
+	NoteWatch   string `json:"WorkNotesList"`
 }
 
 // rootCmd represents the base command when called without any subcommands
@@ -71,6 +77,9 @@ var rootCmd = &cobra.Command{
 			CI:           CIs[CI],
 			State:        states[state],
 			WorkNotes:    WorkNotes,
+			AssignedTo:   AssignedTo,
+			CommentWatch: CommentWatch,
+			NoteWatch: 	  NoteWatch,
 		}
 		//fmt.Printf("%v\n", data)
 		//os.Exit(1)
@@ -115,6 +124,9 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", "", "API key file.")
 	rootCmd.PersistentFlags().StringVarP(&CI, "configuration-item", "c", "hyak", "Configuration item (required).")
+	rootCmd.PersistentFlags().StringVarP(&AssignedTo, "assigned-to", "a", "", "A single netID or email address for the primary contact working on the record.")
+	rootCmd.PersistentFlags().StringVarP(&CommentWatch, "watch-list", "w", "", "A comma-separated list of email addresses to add to the watch list for this record. This is for all customer facing communications.")
+	rootCmd.PersistentFlags().StringVarP(&NoteWatch, "note-list", "n", "", "A comma-separated list of email addresses to add to the work note watch list for this record. This is for all internal (i.e., non-customer) facing communications and notes.")
 	rootCmd.PersistentFlags().StringVarP(&state, "state", "s", "open", "The state of the record. Valid values are (o)pen or (r)esolved.")
 
 	rootCmd.Flags().StringVarP(&RecordNumber, "record", "r", "", "Service Now record number (required). Only REQs, CHGs, and INCs supported.")
