@@ -19,6 +19,7 @@ import (
 var url string = "https://uwconnect.uw.edu/yavin.do"
 var KeyFile string
 var RecordNumber string
+var CI string
 
 type Payload struct {
 	RecordNumber string `json:"RecordNumber"`
@@ -44,32 +45,28 @@ var rootCmd = &cobra.Command{
 
 		WorkNotes := GetWorkNotes(args)
 
+		CIs := map[string]string{
+			"hyak":  "Shared HPC Cluster (Hyak)",
+			"kopah": "Kopah",
+			"lolo":  "Shared Central File System (lolo)",
+		}
+
 		// Create the JSON payload.
 		// https://uwconnect.uw.edu/kb_view.do?sysparm_article=KB0025022
 		data := Payload{
 			RecordNumber: RecordNumber,
-			CI:           "Shared HPC Cluster (Hyak)",
+			CI:           CIs[CI],
 			WorkNotes:    WorkNotes,
 		}
-		//fmt.Printf("JSON %v", data)
-		//os.Exit(1)
-
-		// 3. Marshal the Go struct into a JSON byte slice
-		payloadBytes, err := json.Marshal(data)
-		if err != nil {
-			log.Fatalf("Error marshaling JSON: %v", err)
-		}
-
-		// 4. Create a new HTTP POST request
-		req, err := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
-		if err != nil {
-			log.Fatalf("Error creating request: %v", err)
-		}
+		fmt.Printf("%v\n", data)
+		os.Exit(1)
+		payloadBytes, _ := json.Marshal(data)
+		req, _ := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
 
 		req.Header.Set("Content-Type", "application/json")
 		req.SetBasicAuth(username, password)
 
-		// 6. Send the request using an HTTP client
+		// Send the API call
 		client := &http.Client{}
 		resp, err := client.Do(req)
 		if err != nil {
@@ -77,15 +74,13 @@ var rootCmd = &cobra.Command{
 		}
 		defer resp.Body.Close()
 
-		// Debugging
-		/*
-			fmt.Println("Response Status:", resp.Status)
-			body, err := io.ReadAll(resp.Body)
-			if err != nil {
-				log.Fatalf("Error reading response body: %v", err)
-			}
-			fmt.Println("Response Body:", string(body))
-		*/
+		if resp.Status != "200 OK" {
+			fmt.Println("Error: Command was run, record was NOT updated.")
+			body, _ := io.ReadAll(resp.Body)
+			log.Fatalf("Error: %s\n%v\n", resp.Status, body)
+		} else {
+			fmt.Printf("%s updated.\n", RecordNumber)
+		}
 	},
 }
 
@@ -102,7 +97,8 @@ func init() {
 	// This function runs before main() and sets up the application.
 	cobra.OnInitialize(GetCredentials)
 
-	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", ".snapi", "config file (default is .env)")
+	rootCmd.PersistentFlags().StringVarP(&KeyFile, "key", "k", ".snapi", "config file")
+	rootCmd.PersistentFlags().StringVarP(&CI, "configuration-item", "c", "hyak", "Configuration item (required).")
 
 	rootCmd.Flags().StringVarP(&RecordNumber, "record", "r", "", "Service Now record number (required).")
 	rootCmd.MarkFlagRequired("record")
@@ -119,7 +115,6 @@ func GetCredentials() {
 		fmt.Fprintf(os.Stderr, "Error reading config file: %s\n", err)
 		os.Exit(1)
 	}
-	//fmt.Printf("Using config file: %s\n", viper.ConfigFileUsed())
 }
 
 func GetWorkNotes(args []string) string {
@@ -137,7 +132,6 @@ func GetWorkNotes(args []string) string {
 	stderrWriter := io.MultiWriter(os.Stderr, &stderrBuf)
 
 	// Run command and save output.
-	//command := strings.Join(args, " ")
 	cmd := exec.Command(args[0], args[1:]...)
 	cmd.Stdout = stdoutWriter
 	cmd.Stderr = stderrWriter
