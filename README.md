@@ -1,6 +1,6 @@
-<center>
-<img src="img/snapi.png" alt="snapi" style="width:300px;"/>
-</center>
+<p align="center">
+<img src="img/logo.png" alt="snapi" style="width:300px;"/>
+</p>
 
 # snapi
 
