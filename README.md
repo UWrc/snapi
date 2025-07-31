@@ -1,3 +1,7 @@
+<center>
+<img src="img/snapi.png" alt="snapi" style="width:300px;"/>
+</center>
+
 # snapi
 
 Automation for the Service Now API (i.e., UW Connect). This is a proof-of-concept tool for automating our interaction with UW Connect. The first use case was to run a command on the infrastructure then automatically capture STDOUT and STDERR in the Work Notes.
