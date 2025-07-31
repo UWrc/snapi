@@ -16,6 +16,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+var version string = "0.0.3"
 var url string = "https://uwconnect.uw.edu/yavin.do"
 var KeyFile string
 var RecordNumber string
@@ -32,7 +33,7 @@ type Payload struct {
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "snapi [flags] [command]",
-	Short: "A command line tool to interact with the ServiceNow API.",
+	Short: fmt.Sprintf("snapi v%s: A command line tool to interact with the ServiceNow API.", version),
 	Long:  ``,
 	Args:  cobra.ArbitraryArgs,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -59,6 +60,7 @@ var rootCmd = &cobra.Command{
 			//"h":        "on hold",
 			//"hold":     "on hold",
 			"r":        "resolved",
+			"resolve": "resolved",
 			"resolved": "resolved",
 		}
 
