@@ -58,8 +58,8 @@ var rootCmd = &cobra.Command{
 			CI:           CIs[CI],
 			WorkNotes:    WorkNotes,
 		}
-		fmt.Printf("%v\n", data)
-		os.Exit(1)
+		//fmt.Printf("%v\n", data)
+		//os.Exit(1)
 		payloadBytes, _ := json.Marshal(data)
 		req, _ := http.NewRequest("POST", url, bytes.NewBuffer(payloadBytes))
 
