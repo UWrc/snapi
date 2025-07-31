@@ -1,6 +1,7 @@
 <p align="center">
-<img src="img/logo.png" alt="snapi" style="width:300px;"/>
-[![Go](https://github.com/UWrc/snapi/actions/workflows/go.yml/badge.svg?branch=main)](https://github.com/UWrc/snapi/actions/workflows/go.yml)
+  <img src="img/logo.png" alt="snapi" style="width:300px;"/>
+  <br />
+  <a href="https://github.com/UWrc/snapi/actions/workflows/go.yml"><img src="https://github.com/UWrc/snapi/actions/workflows/go.yml/badge.svg?branch=main"></a>
 </p>
 
 # snapi
