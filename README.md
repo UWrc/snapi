@@ -16,7 +16,7 @@ Create a `.snapi` file in the same location as the executable. This is a dot env
 
 ## Usage
 
-Run `snapi -h` for additional information.
+Run `snapi -h` for additional information. `snapi` is available on `klone-head01`.
 
 ```bash
 $ snapi -h
