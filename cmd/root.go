@@ -32,8 +32,8 @@ type Payload struct {
 	State        string `json:"State"`
 	WorkNotes    string `json:"WorkNotes"`
 	AssignedTo   string `json:"AssignedTo"`
-	CommentWatch   string `json:"WatchList"`
-	NoteWatch   string `json:"WorkNotesList"`
+	CommentWatch string `json:"WatchList"`
+	NoteWatch    string `json:"WorkNotesList"`
 }
 
 // rootCmd represents the base command when called without any subcommands
@@ -53,9 +53,10 @@ var rootCmd = &cobra.Command{
 		}
 
 		CIs := map[string]string{
-			"hyak":  "Shared HPC Cluster (Hyak)",
-			"kopah": "Kopah",
-			"lolo":  "Shared Central File System (lolo)",
+			"hyak":     "Shared HPC Cluster (Hyak)",
+			"tillicum": "Tillicum",
+			"kopah":    "Kopah",
+			"lolo":     "Shared Central File System (lolo)",
 		}
 
 		states := map[string]string{
@@ -66,7 +67,7 @@ var rootCmd = &cobra.Command{
 			//"h":        "on hold",
 			//"hold":     "on hold",
 			"r":        "resolved",
-			"resolve": "resolved",
+			"resolve":  "resolved",
 			"resolved": "resolved",
 		}
 
@@ -79,7 +80,7 @@ var rootCmd = &cobra.Command{
 			WorkNotes:    WorkNotes,
 			AssignedTo:   AssignedTo,
 			CommentWatch: CommentWatch,
-			NoteWatch: 	  NoteWatch,
+			NoteWatch:    NoteWatch,
 		}
 		//fmt.Printf("%v\n", data)
 		//os.Exit(1)
